@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Mooey's Solar System Simulation -- Modified</title>
+        <link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
+        <link type="text/css" href="css/jquery-ui-1.css" rel="stylesheet">
+		<link type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
+        <script type="text/javascript" src="js/jquery-1.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.js"></script>
+        <script type="text/javascript" src="js/raphael-min.js"></script>
+        <script type="text/javascript" src="js/jquery.qtip-1.0.0-rc3.min.js"></script>
+        <script type="text/javascript" src="js/mooeysolar.js"></script>
+        <script type="text/javascript" charset="utf-8">
+        (function() {
+            $(document).ready(function() {
+            	$( "#slider_speed" ).slider({
+            			value:35000,
+            			min: 1000,
+            			max: 1000000,
+            			step: 10,
+            			slide: function( event, ui ) {
+                            $( "#control_speed" ).val( ui.value );
+                            constants.speed = ui.value;
+            			}
+            	});
+            	$( "#control_speed" ).val(  $( "#slider_speed" ).slider( "value" ) );
+
+            	$( "#slider_zoom" ).slider({
+            			value: 1,
+            			min: 0.01,
+            			max: 3,
+            			step: 0.01,
+            			slide: function( event, ui ) {
+                            $( "#control_zoom" ).val( ui.value );
+							zoomFac = ui.value;
+            			}
+            	});
+            	$( "#control_zoom" ).val(  $( "#slider_zoom" ).slider( "value" ) );
+            	
+				var oldselected = 0;
+            	$('#tabs').tabs();
+                $('#tabs').bind('tabsselect', function(event, ui) {
+                    if ( ui.index === 0 ) {
+							r.planets[ui.index].thing.attr({fill: "#FF9100", stroke: "FF5500"});
+                    }else {
+                        r.planets[ui.index].thing.attr({fill: "#FF0059", stroke: "#C200"});
+                    }
+                    if ( oldselected === 0 ) {
+
+                        r.planets[oldselected].thing.attr({fill: "#ffe230", stroke: "#ff7900"});
+                    } else {
+                        if ( r.planets[oldselected] ){
+                            r.planets[oldselected].thing.attr({fill: "#00c7ff", stroke: "#0080a4"});
+                        }
+                    }
+                    oldselected = ui.index;
+                });
+				
+				//TOOLTIPS:
+				$('#Sun').qtip({
+					content: 'This is an active list element',
+					position: {
+						corner: {
+							target: 'topLeft',
+							tooltip: 'bottomMiddle'
+						}
+					},
+					show: 'mouseover',
+					hide: 'mouseout',
+					name: 'cream', 
+					tip: true 
+				});
+				
+            });
+        }).call(this);
+    </script>
+    </head>
+
+    <body>
+<div id="text"></div>
+<div id="wrapper">
+	<div id="description">
+		<h1>The Solar System</h1>
+		<!-- Tabs -->
+		<div id="tabs">
+			<ul>
+				<li><a href="#0">The Sun</a></li>
+				<li><a href="#1">Mercury</a></li>
+				<li><a href="#2">Venus</a></li>
+				<li><a href="#3">Earth</a></li>
+				<li><a href="#4">Mars</a></li>
+				<li><a href="#5">Jupiter</a></li>
+				<li><a href="#6">Saturn</a></li>
+				<li><a href="#7">Uranus</a></li>
+				<li><a href="#8">Neptune</a></li>
+			</ul>
+			<div id="0"><h2>The Sun</h2></div>
+			<div id="1"><h2>Mercury</h2></div>
+			<div id="2"><h2>Venus</h2></div>
+			<div id="3"><h2>Earth</h2></div>
+			<div id="4"><h2>Mars</h2></div>
+			<div id="5"><h2>Jupiter</h2></div>
+			<div id="6"><h2>Saturn</h2></div>
+			<div id="7"><h2>Uranus</h2></div>
+			<div id="8"><h2>Neptune</h2></div>
+		</div>
+	</div>
+	<div id="controls">
+		<table cellpadding="2" cellspacing="0" width="100%"><tbody>
+			<tr>
+				<td width="50">Speed: </td>
+				<td><div id="slider_speed"></div></td>
+				<td width="50"><input value="35000" readonly="readonly" name="control_speed" id="control_speed" style="width: 50px; background: none repeat scroll 0% 0% rgb(102, 102, 102); border: 1px solid rgb(68, 68, 68); color: rgb(17, 17, 17);" type="text"></td>
+			</tr>
+			<tr>
+				<td width="50">Zoom: </td>
+				<td><div id="slider_zoom"></div></td>
+				<td width="50"><input value="35000" readonly="readonly" name="control_zoom" id="control_zoom" style="width: 50px; background: none repeat scroll 0% 0% rgb(102, 102, 102); border: 1px solid rgb(68, 68, 68); color: rgb(17, 17, 17);" type="text"></td>
+			</tr>
+		</tbody></table>
+	</div>
+</div>
+
+<div id="holder"></div>
+    
+</body></html>
