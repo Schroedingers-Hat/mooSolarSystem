@@ -5,9 +5,9 @@
         <title>Mooey's Solar System Simulation -- Modified</title>
         <link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
         <link type="text/css" href="css/jquery-ui-1.css" rel="stylesheet">
-		<link type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
-        <script type="text/javascript" src="js/jquery-1.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.js"></script>
+		<link type="text/css" href="css/vader/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="js/raphael-min.js"></script>
         <script type="text/javascript" src="js/jquery.qtip-1.0.0-rc3.min.js"></script>
         <script type="text/javascript" src="js/mooeysolar.js"></script>
@@ -33,7 +33,9 @@
             			step: 0.01,
             			slide: function( event, ui ) {
                             $( "#control_zoom" ).val( ui.value );
-							zoomFac = ui.value;
+                            zoomFac = ui.value;
+                            someTransform.scale = Math.sqrt(constants.orbitScale * zoomFac);
+                            r.planets.forEach(function(thisPlanet){thisPlanet.thing.attr({r:(Math.sqrt(thisPlanet.r * zoomFac * constants.planetScale))});});
             			}
             	});
             	$( "#control_zoom" ).val(  $( "#slider_zoom" ).slider( "value" ) );
@@ -56,6 +58,30 @@
                     }
                     oldselected = ui.index;
                 });
+				$( "#description" ).dialog({
+					autoOpen: true,
+					show: "fade",
+					hide: "fade",
+					close: function(event, ui) {
+						$("#control_description").attr('checked',false);
+					},
+					open: function(event, ui) {
+						$("#control_description").attr('checked',true);
+					}
+				});
+				$( "#description" ).dialog( "option", "position", '[top,left]' );
+				$("#control_checks").buttonset();
+				
+				$("#control_reverse").change(function () {
+					constants.speed = -constants.speed;
+				});
+				$("#control_description").change(function () {
+					if ($(this).is(':checked')){
+						$("#description").dialog( "open" );
+					} else {
+						$("#description").dialog( "close" );
+					}
+				});
 				
 				//TOOLTIPS:
 				$('#Sun').qtip({
@@ -80,8 +106,7 @@
     <body>
 <div id="text"></div>
 <div id="wrapper">
-	<div id="description">
-		<h1>The Solar System</h1>
+	<div id="description" title="The Solar System">
 		<!-- Tabs -->
 		<div id="tabs">
 			<ul>
@@ -95,15 +120,15 @@
 				<li><a href="#7">Uranus</a></li>
 				<li><a href="#8">Neptune</a></li>
 			</ul>
-			<div id="0"><h2>The Sun</h2></div>
-			<div id="1"><h2>Mercury</h2></div>
-			<div id="2"><h2>Venus</h2></div>
-			<div id="3"><h2>Earth</h2></div>
-			<div id="4"><h2>Mars</h2></div>
-			<div id="5"><h2>Jupiter</h2></div>
-			<div id="6"><h2>Saturn</h2></div>
-			<div id="7"><h2>Uranus</h2></div>
-			<div id="8"><h2>Neptune</h2></div>
+			<div id="0"><img src="images/Sun.jpg" /></div>
+			<div id="1"><img src="images/Mercury.jpg" /></div>
+			<div id="2"><img src="images/Venus.jpg" /></div>
+			<div id="3"><img src="images/Earth.jpg" /></div>
+			<div id="4"><img src="images/Mars.jpg" /></div>
+			<div id="5"><img src="images/Jupiter.jpg" /></div>
+			<div id="6"><img src="images/Saturn.jpg" /></div>
+			<div id="7"><img src="images/Uranus.jpg" /></div>
+			<div id="8"><img src="images/Neptune.jpg" /></div>
 		</div>
 	</div>
 	<div id="controls">
@@ -117,6 +142,14 @@
 				<td width="50">Zoom: </td>
 				<td><div id="slider_zoom"></div></td>
 				<td width="50"><input value="35000" readonly="readonly" name="control_zoom" id="control_zoom" style="width: 50px; background: none repeat scroll 0% 0% rgb(102, 102, 102); border: 1px solid rgb(68, 68, 68); color: rgb(17, 17, 17);" type="text"></td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
+					<div id="control_checks">
+						<input type="checkbox" name="control_description" id="control_description" /><label for="control_description">Show Description</label>
+						<input type="checkbox" name="control_reverse" id="control_reverse" /><label for="control_reverse">Reverse Orbit</label>
+					</div>
+				</td>
 			</tr>
 		</tbody></table>
 	</div>

@@ -1,7 +1,7 @@
 body {
     background: #111;
     color: #fff;
-    font: 8px   "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+    font: 12px   "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
 }
 #holder {
     height: 600px;
@@ -23,6 +23,7 @@ body {
 #description {
 	float:left;
 	color: #ccc;
+    font-size: 10px;
 	width: 400px;
 	margin-left: auto;
 	margin-right: auto;
