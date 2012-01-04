@@ -1,3 +1,4 @@
+<?php include("data.php"); ?>
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -16,7 +17,7 @@
             $(document).ready(function() {
             	$( "#slider_speed" ).slider({
             			value:35000,
-            			min: 1000,
+            			min: 100,
             			max: 1000000,
             			step: 10,
             			slide: function( event, ui ) {
@@ -83,29 +84,17 @@
 					}
 				});
 				
-				//TOOLTIPS:
-				$('#Sun').qtip({
-					content: 'This is an active list element',
-					position: {
-						corner: {
-							target: 'topLeft',
-							tooltip: 'bottomMiddle'
-						}
-					},
-					show: 'mouseover',
-					hide: 'mouseout',
-					name: 'cream', 
-					tip: true 
-				});
 				
             });
         }).call(this);
     </script>
     </head>
 
-    <body>
-<div id="text"></div>
+<body>
+
 <div id="wrapper">
+<?php
+?>
 	<div id="description" title="The Solar System">
 		<!-- Tabs -->
 		<div id="tabs">
@@ -120,15 +109,29 @@
 				<li><a href="#7">Uranus</a></li>
 				<li><a href="#8">Neptune</a></li>
 			</ul>
-			<div id="0"><img src="images/Sun.jpg" /></div>
-			<div id="1"><img src="images/Mercury.jpg" /></div>
-			<div id="2"><img src="images/Venus.jpg" /></div>
-			<div id="3"><img src="images/Earth.jpg" /></div>
-			<div id="4"><img src="images/Mars.jpg" /></div>
-			<div id="5"><img src="images/Jupiter.jpg" /></div>
-			<div id="6"><img src="images/Saturn.jpg" /></div>
-			<div id="7"><img src="images/Uranus.jpg" /></div>
-			<div id="8"><img src="images/Neptune.jpg" /></div>
+<?php
+	$index = 0;
+	foreach ($planetInfo as &$pl) {
+		print "<div id='".$index."'>\n"; 
+?>
+				<table width="100%" cellspacing=0 cellpadding=2>
+					<tr><td colspan=3 align="center"><a href="http://solarsystem.nasa.gov/planets/profile.cfm?Object=<?php print $pl['name']?>" target="_blank"><img class="tabimg" src="images/<?php print $pl['name']?>.jpg" /></a></td></tr>
+<?php /*					<tr>
+						<td>Distance from Earth</td>
+						<td>149,597,900 km</td>
+					</tr>*/ ?>
+					<tr><td>Mean Radius</td><td><?php print printf('%3.2e',$pl['mean_radius']) ?> km</td><td><?php print printf('%3.2e',$pl['mean_radius']/$planetInfo[3]['mean_radius']); ?> of Earth's</td></tr>
+					<tr><td>Volume</td><td><?php print printf('%3.2e',$pl['volume']) ?> km<sup>3</sup></td><td><?php print printf('%3.2e',$pl['volume']/$planetInfo[3]['volume']); ?> Earths</td></tr>
+					<tr><td>Mass</td><td><?php print printf('%3.2e',$pl['mass']) ?> kg</td><td><?php print printf('%3.2e',$pl['mass']/$planetInfo[3]['mass']); ?> Earths</td></tr>
+					<tr>
+						<td colspan=3><a href="http://solarsystem.nasa.gov/planets/profile.cfm?Object=<?php print $pl['name']?>" target="_blank">Read More</a></td>
+					</tr>
+				</table>
+<?php		
+		print "</div>";
+		$index++;
+	}
+?>	
 		</div>
 	</div>
 	<div id="controls">

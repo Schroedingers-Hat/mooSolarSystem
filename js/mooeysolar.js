@@ -7,6 +7,7 @@ var constants = {
 	planetScale: 2e-6
 	};
 
+var center_pos = {x: 450,y: 250};
 var zoomFac = 1;
 
 var solveKepler = function(a, e, p, t, transform,pos) {
@@ -110,52 +111,52 @@ Raphael("holder", 800, 600, function () {
          r: 6.9e8,
          a: 1e-30,
          e: 0,
-         tooltip: 'This is the sun, it is shiny.'},
+         tooltip: 'The Sun'},
         {name: "Mercury",
          r: 2.44e6,
          a: 5.7e10,
          e: 0.206,
-		 tooltip: ''},
+		 tooltip: 'Mercury'},
         {name: "Venus",
          r: 6.051e6,
          a: 1.082e11,
          e: 0.0068,
-		 tooltip: ''}, 
+		 tooltip: 'Venus'}, 
         {name: "Earth",
          r: 6.3e6,
          a: 1 * constants.au,
          e: 0.0167,
-		 tooltip: ''},
+		 tooltip: 'Earth'},
         {name: "Mars",
          r: 3.396e6,
          a: 2.279e11,
          e: 0.093,
-		 tooltip: ''},
+		 tooltip: 'Mars'},
         {name: "Jupiter",
          r: 6.7e7,
          a: 5.204 * constants.au,
          e: 0.0488,
-		 tooltip: ''},
+		 tooltip: 'Jupiter'},
         {name: "Saturn",
          r: 6.027e7,
          a: 1.4334e12,
          e: 0.0557,
-		 tooltip: ''},
+		 tooltip: 'Saturn'},
         {name: "Uranus",
          r:2.556e7,
          a: 2.8768e12,
          e: 0.0444,
-		 tooltip: ''},
+		 tooltip: 'Uranus'},
         {name: "Neptune",
             r: 2.48e7,
             a: 4.503e12,
             e: 0.0112,
-		 tooltip: ''}
+		 tooltip: 'Neptune'}
 	];
     // Global reference for the ui stuff to get at it.
     // Should really make some sort of glue code instead.
     window.r = this;
-        var someTransform = {x:400, y:200, angle:0, scale: Math.sqrt(constants.orbitScale*zoomFac)};
+        var someTransform = {x:center_pos.x, y:center_pos.y, angle:0, scale: Math.sqrt(constants.orbitScale*zoomFac)};
         window.someTransform = someTransform;
     r.planets.forEach(function(thisPlanet){
         // Object to hold the relevant maths/position cache.
@@ -167,7 +168,7 @@ Raphael("holder", 800, 600, function () {
 		thisPlanet.thing.node.id = thisPlanet.name;
 		thisPlanet.thing.node.name = thisPlanet.name;
         $(('#' + thisPlanet.name)).qtip({
-            content: thisPlanet.tooltip || 'Default tooltip string.',
+            content: "<b>" + thisPlanet.tooltip + "</b><br />" + thisPlanet.distFromEarth + "<br /><img src='images/" + thisPlanet.name + ".jpg' height='50' />" || 'Spatial object.',
 			position: {
 				corner: {
 					target: 'topMiddle',
@@ -175,7 +176,7 @@ Raphael("holder", 800, 600, function () {
 				}
 			},
 			style: { 
-				width: 200,
+				width: 150,
 				padding: 5,
 				background: '#A2D959',
 				color: 'black',
@@ -248,6 +249,8 @@ Raphael("holder", 800, 600, function () {
                 // If not our special planet, then animate it.
                 // Everything should be synchronised every second.
                 thisPlanet.thing.animate(params[idx], 1e3);
+				// For the tooltip
+				thisPlanet.distFromEarth = Math.sqrt((thisPlanet.thing.cx - r.planets[3].thing.cx)^2 + (thisPlanet.thing.cy - r.planets[3].thing.cy)^2);
             }
             //thisPlanet.text.animate(params[idx], 1e3);
         });

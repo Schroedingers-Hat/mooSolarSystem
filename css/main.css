@@ -61,3 +61,7 @@ body {
 	padding: 5px;
 	font-size: 12px;
 }
+
+.tabimg {
+	border: 3px solid #67ABF0;
+}
